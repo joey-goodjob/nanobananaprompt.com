@@ -1,0 +1,131 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(16px);
+  background: rgba(255, 253, 245, 0.9);
+  border-bottom: 1px solid rgba(255, 214, 142, 0.6);
+  box-shadow: 0 10px 30px rgba(228, 174, 80, 0.2);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 76px;
+  gap: 24px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  border-radius: 999px;
+  border: 2px solid rgba(255, 207, 134, 0.8);
+}
+
+.logo {
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--text-strong);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.navItem,
+.navItemActive {
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--text-muted);
+  transition: color var(--transition);
+}
+
+.navItem:hover {
+  color: var(--text-strong);
+}
+
+.navItemActive {
+  color: var(--banana-600);
+}
+
+.actions {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.languageLabel {
+  font-size: 13px;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  letter-spacing: 0.1em;
+}
+
+.languageToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 207, 134, 0.8);
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--text-strong);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.languageDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 140px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 207, 134, 0.5);
+  background: #fffdf5;
+  box-shadow: 0 12px 30px rgba(218, 160, 71, 0.3);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.languageOption,
+.languageOptionActive {
+  border: none;
+  background: transparent;
+  padding: 8px 12px;
+  border-radius: 12px;
+  text-align: left;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.languageOptionActive {
+  background: rgba(252, 211, 77, 0.35);
+  color: var(--text-strong);
+  font-weight: 600;
+}
+
+@media (max-width: 700px) {
+  .inner {
+    flex-direction: column;
+    padding: 12px 0;
+  }
+
+  .nav {
+    gap: 16px;
+  }
+
+  .actions {
+    width: 100%;
+    justify-content: center;
+  }
+}

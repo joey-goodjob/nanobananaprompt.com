@@ -1,0 +1,97 @@
+.wrapper {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  margin-top: -120px;
+}
+
+.hero {
+  width: 100%;
+  min-height: 100vh;
+  padding: 100px 48px 80px;
+  border-radius: 0;
+  background: linear-gradient(135deg, #ffeab6 0%, #ffd28c 60%, #ffebb8 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  justify-content: center;
+}
+
+.headline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.badge {
+  display: inline-flex;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 200, 96, 0.5);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(46px, 7vw, 72px);
+  line-height: 1.1;
+}
+
+.description {
+  margin: 0;
+  font-size: 18px;
+  color: var(--text-muted);
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.stat {
+  text-align: center;
+}
+
+.statValue {
+  font-size: 28px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.statLabel {
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.buttons :global(.primaryButton),
+.buttons :global(.secondaryButton) {
+  min-width: 180px;
+}
+
+@media (max-width: 780px) {
+  .hero {
+    padding: 96px 24px 64px;
+  }
+}

@@ -1,0 +1,56 @@
+.footerWrapper {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  background: #120c02;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.footer {
+  width: min(1200px, 100% - 32px);
+  margin: 0 auto;
+  padding: 40px 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.logo {
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.links a {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  flex-wrap: wrap;
+}

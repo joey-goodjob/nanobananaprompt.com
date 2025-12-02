@@ -1,0 +1,333 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 96px;
+}
+
+.primaryButton,
+.secondaryButton {
+  padding: 14px 28px;
+  border-radius: 999px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition: transform var(--transition), box-shadow var(--transition),
+    background var(--transition);
+}
+
+.primaryButton {
+  background: linear-gradient(120deg, #fcd34d, #fbbf24);
+  color: #2a1601;
+  box-shadow: 0 15px 45px rgba(250, 190, 60, 0.45);
+}
+
+.secondaryButton {
+  border-color: rgba(255, 200, 110, 0.8);
+  color: var(--text-strong);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.primaryButton:hover,
+.secondaryButton:hover {
+  transform: translateY(-2px);
+}
+
+.heroStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.statValue {
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.statLabel {
+  font-size: 13px;
+  color: var(--text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.heroPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.heroInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.featuredCard {
+  padding: 24px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 199, 128, 0.4);
+  box-shadow: var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.panelLabel {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 12px;
+  color: var(--text-soft);
+}
+
+.panelDescription {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.panelMeta {
+  display: flex;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.panelLink {
+  font-weight: 600;
+  color: var(--leaf);
+}
+
+.playbookList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.playbookList article {
+  padding: 16px 18px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 209, 140, 0.35);
+}
+
+.playbookList p {
+  margin: 4px 0 8px;
+  color: var(--text-muted);
+}
+
+.playbookList ul {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--text-soft);
+  line-height: 1.5;
+}
+
+.articleSection {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.sectionHeaderCenter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.sectionEyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 12px;
+  color: var(--text-soft);
+}
+
+.sectionTitle {
+  margin: 0;
+  text-align: center;
+}
+
+.sectionDescription {
+  max-width: 560px;
+  color: var(--text-muted);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.loadingState {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 214, 140, 0.4);
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--text-muted);
+}
+
+.loadingDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: var(--banana-400);
+  animation: pulse 1.3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.4;
+  }
+}
+
+.waterfallGrid {
+  column-count: 3;
+  column-gap: 20px;
+}
+
+.articleCard {
+  break-inside: avoid;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 28px;
+  border: 1px solid rgba(255, 209, 140, 0.45);
+  margin-bottom: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--card-shadow);
+  transition: transform var(--transition);
+}
+
+.articleCard:hover {
+  transform: translateY(-4px);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.cardTag {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255, 221, 155, 0.45);
+  color: var(--text-strong);
+  font-size: 12px;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 20px;
+}
+
+.cardDescription {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.cardImage {
+  width: 100%;
+  border-radius: 20px;
+  margin-top: 8px;
+  object-fit: cover;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tagGroup {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tagChip {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(58, 125, 68, 0.08);
+  color: var(--leaf);
+  font-size: 12px;
+}
+
+.readingTime {
+  font-size: 12px;
+  color: var(--text-soft);
+}
+
+.loadMoreRow {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.loadMoreButton {
+  padding: 12px 32px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 200, 100, 0.7);
+  background: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+  color: var(--text-strong);
+  transition: transform var(--transition), background var(--transition);
+}
+
+.loadMoreButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.loadMoreButton:not(:disabled):hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 1);
+}
+
+@media (max-width: 960px) {
+  .heroSection {
+    grid-template-columns: 1fr;
+    padding: 32px 24px;
+  }
+
+  .waterfallGrid {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 640px) {
+  .heroHighlights {
+    grid-template-columns: 1fr;
+  }
+
+  .heroActions {
+    flex-direction: column;
+  }
+
+  .waterfallGrid {
+    column-count: 1;
+  }
+
+  .heroSection {
+    padding: 24px;
+  }
+}
