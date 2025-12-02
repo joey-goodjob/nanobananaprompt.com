@@ -139,6 +139,15 @@ function asString(value: unknown): string | undefined {
   return undefined;
 }
 
+function getImageUrl(value: unknown): string | undefined {
+  if (typeof value === "string") return value;
+  if (typeof value === "object" && value !== null) {
+    const obj = value as Record<string, unknown>;
+    return asString(obj.url);
+  }
+  return undefined;
+}
+
 function normalizeArticle(raw: Record<string, unknown>): Article {
   const slug =
     asString(raw.slug) ||
@@ -165,30 +174,29 @@ function normalizeArticle(raw: Record<string, unknown>): Article {
         : undefined;
 
   const coverImage =
-    raw.coverImage?.url ||
-    raw.coverImage ||
-    raw.featuredImage?.url ||
-    raw.heroImage?.url ||
-    raw.thumbnail?.url;
+    getImageUrl(raw.coverImage) ||
+    getImageUrl(raw.featuredImage) ||
+    getImageUrl(raw.heroImage) ||
+    getImageUrl(raw.thumbnail);
 
   return {
     id,
     slug,
-    title: raw.title || raw.heroTitle || slug,
-    description: raw.description || raw.excerpt || raw.summary,
-    excerpt: raw.excerpt || raw.summary || raw.description,
+    title: asString(raw.title) || asString(raw.heroTitle) || slug,
+    description: asString(raw.description) || asString(raw.excerpt) || asString(raw.summary),
+    excerpt: asString(raw.excerpt) || asString(raw.summary) || asString(raw.description),
     coverImage: typeof coverImage === "string" ? coverImage : undefined,
     htmlContent,
-    createdAt: raw.createdAt,
-    updatedAt: raw.updatedAt,
-    publishedAt: raw.publishedAt || raw.createdAt,
+    createdAt: asString(raw.createdAt),
+    updatedAt: asString(raw.updatedAt),
+    publishedAt: asString(raw.publishedAt) || asString(raw.createdAt),
     category:
       asString(raw.category) ||
-      (Array.isArray(raw.categories) && raw.categories[0]) ||
+      (Array.isArray(raw.categories) && asString(raw.categories[0])) ||
       undefined,
     tags: normalizeTags(raw.tags || raw.keywords),
     blocks: normalizeBlocks(blockSource),
-    status: raw._status || raw.status || (raw.published ? "published" : "draft"),
+    status: asString(raw._status) || asString(raw.status) || (raw.published ? "published" : "draft"),
   };
 }
 
@@ -209,7 +217,7 @@ function mapArticleListItem(doc: Record<string, unknown>): ArticleListItem {
     readingTime:
       asString(doc.readingTime) ||
       asString(doc.estimatedReadingTime) ||
-      asString(doc.metadata?.readingTime),
+      (typeof doc.metadata === "object" && doc.metadata !== null ? asString((doc.metadata as Record<string, unknown>).readingTime) : undefined),
   };
 }
 
@@ -235,7 +243,9 @@ export async function fetchArticleClient(
     return null;
   }
 
-  return normalizeArticle(data.docs[0]);
+  const doc = data.docs[0];
+  if (!doc) return null;
+  return normalizeArticle(doc);
 }
 
 export async function fetchArticlesClient(
@@ -301,7 +311,9 @@ export async function fetchPostClient(
     return null;
   }
 
-  return normalizeArticle(data.docs[0]);
+  const doc = data.docs[0];
+  if (!doc) return null;
+  return normalizeArticle(doc);
 }
 
 export async function fetchPostByIdClient(

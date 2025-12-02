@@ -31,6 +31,7 @@ export default function ArticleSection({
 
   const mergeArticles = useCallback((nextItems: ArticleListProps["articles"]) => {
     setArticles((prev) => {
+      if (!prev || !nextItems) return prev;
       const existingIds = new Set(prev.map((item) => item.id));
       const appended = nextItems.filter((item) => !existingIds.has(item.id));
       return appended.length ? [...prev, ...appended] : prev;

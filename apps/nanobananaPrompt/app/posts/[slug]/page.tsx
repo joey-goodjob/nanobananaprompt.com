@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import {
-  cmsConfig,
   fetchArticlesClient,
   fetchPostClient,
 } from "@/lib/cms-client";
@@ -9,7 +8,7 @@ import ArticleContent from "./article-content";
 
 type RouteParams = { slug: string } | Promise<{ slug: string }>;
 
-export const revalidate = cmsConfig.cache.revalidate;
+export const revalidate = 60;
 export const dynamicParams = true;
 
 export async function generateStaticParams() {

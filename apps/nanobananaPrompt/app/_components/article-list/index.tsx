@@ -28,7 +28,7 @@ function extractFirstImage(html?: string) {
 function extractFirstParagraph(html?: string) {
   if (!html) return undefined;
   const match = html.match(/<p[^>]*>([\s\S]*?)<\/p>/i);
-  const raw = match ? match[1] : html;
+  const raw = match?.[1] ?? html;
   const text = raw.replace(/<[^>]+>/g, "").trim();
   return text || undefined;
 }

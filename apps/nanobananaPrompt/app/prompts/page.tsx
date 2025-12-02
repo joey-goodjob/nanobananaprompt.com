@@ -2,7 +2,7 @@ import { cmsConfig, fetchArticlesClient } from "@/lib/cms-client";
 import PromptNavigator from "./prompt-navigator";
 import styles from "./page.module.css";
 
-export const revalidate = cmsConfig.cache.revalidate;
+export const revalidate = 60;
 
 const PAGE_SIZE = 24;
 

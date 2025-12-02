@@ -21,10 +21,10 @@ type LanguageContextValue = {
   languages: LanguageOption[];
 };
 
-const languageOptions: LanguageOption[] = [
+const languageOptions = [
   { code: "zh-CN", label: "中文", locale: "zh" },
   { code: "en", label: "English", locale: "en" },
-];
+] as const satisfies LanguageOption[];
 
 const LanguageContext = createContext<LanguageContextValue | undefined>(
   undefined

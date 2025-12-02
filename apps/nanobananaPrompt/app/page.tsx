@@ -6,10 +6,10 @@ import InspirationGallerySection from "./_components/inspiration-gallery";
 import CommunityShowcaseSection from "./_components/showcase";
 import FaqSection from "./_components/faq";
 import CtaSection from "./_components/cta";
-import { cmsConfig, fetchArticlesClient } from "@/lib/cms-client";
+import { fetchArticlesClient } from "@/lib/cms-client";
 import styles from "./page.module.css";
 
-export const revalidate = cmsConfig.cache.revalidate;
+export const revalidate = 60;
 
 export default async function HomePage() {
   const articleResponse = await fetchArticlesClient({ limit: 18 });
@@ -24,7 +24,7 @@ export default async function HomePage() {
       <Hero totalArticles={total} featuredArticle={featuredArticle} />
 
       <ArticleSection
-        initialArticles={articles}
+        articles={articles}
         initialPage={articleResponse?.page ?? 1}
         totalPages={totalPages}
         pageSize={pageSize}
