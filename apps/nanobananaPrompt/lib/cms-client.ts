@@ -50,6 +50,8 @@ export const cmsConfig = {
   },
 } as const;
 
+//构建
+
 function createDefaultHeaders(): Headers {
   const headers = new Headers({
     "Content-Type": "application/json",
@@ -91,7 +93,10 @@ function getBaseFetchOptions(): NextFetchInit {
   };
 }
 
-async function cmsFetch<T>(url: string, init?: NextFetchInit): Promise<T | null> {
+async function cmsFetch<T>(
+  url: string,
+  init?: NextFetchInit
+): Promise<T | null> {
   try {
     const response = await fetch(url, {
       ...getBaseFetchOptions(),
@@ -100,7 +105,9 @@ async function cmsFetch<T>(url: string, init?: NextFetchInit): Promise<T | null>
     });
 
     if (!response.ok) {
-      console.error(`[CMS] Request failed: ${response.status} ${response.statusText}`);
+      console.error(
+        `[CMS] Request failed: ${response.status} ${response.statusText}`
+      );
       return null;
     }
 
@@ -128,7 +135,10 @@ function normalizeTags(value: unknown): string[] | undefined {
     return value.filter((tag): tag is string => typeof tag === "string");
   }
   if (typeof value === "string") {
-    return value.split(",").map((tag) => tag.trim()).filter(Boolean);
+    return value
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter(Boolean);
   }
   return undefined;
 }
@@ -183,8 +193,14 @@ function normalizeArticle(raw: Record<string, unknown>): Article {
     id,
     slug,
     title: asString(raw.title) || asString(raw.heroTitle) || slug,
-    description: asString(raw.description) || asString(raw.excerpt) || asString(raw.summary),
-    excerpt: asString(raw.excerpt) || asString(raw.summary) || asString(raw.description),
+    description:
+      asString(raw.description) ||
+      asString(raw.excerpt) ||
+      asString(raw.summary),
+    excerpt:
+      asString(raw.excerpt) ||
+      asString(raw.summary) ||
+      asString(raw.description),
     coverImage: typeof coverImage === "string" ? coverImage : undefined,
     htmlContent,
     createdAt: asString(raw.createdAt),
@@ -196,7 +212,10 @@ function normalizeArticle(raw: Record<string, unknown>): Article {
       undefined,
     tags: normalizeTags(raw.tags || raw.keywords),
     blocks: normalizeBlocks(blockSource),
-    status: asString(raw._status) || asString(raw.status) || (raw.published ? "published" : "draft"),
+    status:
+      asString(raw._status) ||
+      asString(raw.status) ||
+      (raw.published ? "published" : "draft"),
   };
 }
 
@@ -217,7 +236,9 @@ function mapArticleListItem(doc: Record<string, unknown>): ArticleListItem {
     readingTime:
       asString(doc.readingTime) ||
       asString(doc.estimatedReadingTime) ||
-      (typeof doc.metadata === "object" && doc.metadata !== null ? asString((doc.metadata as Record<string, unknown>).readingTime) : undefined),
+      (typeof doc.metadata === "object" && doc.metadata !== null
+        ? asString((doc.metadata as Record<string, unknown>).readingTime)
+        : undefined),
   };
 }
 
@@ -286,7 +307,8 @@ export async function fetchArticlesClient(
     total: data.totalDocs ?? docs.length,
     page: data.page ?? page,
     pageSize: data.limit ?? limit,
-    totalPages: data.totalPages ?? Math.ceil((data.totalDocs ?? docs.length) / limit),
+    totalPages:
+      data.totalPages ?? Math.ceil((data.totalDocs ?? docs.length) / limit),
   };
 }
 
