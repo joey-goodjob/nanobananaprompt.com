@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import Script from "next/script";
 import SiteHeader from "./_components/layout/header";
 import SiteFooter from "./_components/layout/footer";
 import { LanguageProvider } from "./_components/language-provider";
@@ -15,8 +16,7 @@ const geistMono = localFont({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
   return {
     metadataBase: new URL(baseUrl),
@@ -61,6 +61,12 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <Script
+          defer
+          data-domain="nano-banana-prompt.com"
+          src="https://plausible.ragdoll-hit.net/js/script.js"
+          strategy="afterInteractive"
+        />
         <LanguageProvider>
           <SiteHeader />
           <div className="site-shell">
