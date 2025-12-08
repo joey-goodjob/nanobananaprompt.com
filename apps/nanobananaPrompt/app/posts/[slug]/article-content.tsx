@@ -7,6 +7,7 @@ import { formatArticleDate } from "@/lib/article-utils";
 import type { Article, ArticleBlock } from "@/types/cms";
 import styles from "./page.module.css";
 import { useLanguage } from "../../_components/language-provider";
+import parse from "html-react-parser";
 
 type ArticleContentProps = {
   slug: string;
@@ -143,11 +144,9 @@ function renderBlock(block: ArticleBlock, index: number) {
       )}
       {paragraphs.map((text, idx) =>
         /<\w+/.test(text) ? (
-          <div
-            key={`block-${index}-p-${idx}`}
-            className={styles.richText}
-            dangerouslySetInnerHTML={{ __html: text }}
-          />
+          <div key={`block-${index}-p-${idx}`} className={styles.richText}>
+            {parse(text)}
+          </div>
         ) : (
           <p key={`block-${index}-p-${idx}`}>{text}</p>
         )
@@ -265,10 +264,9 @@ export default function ArticleContent({
           {article.blocks.length > 0 ? (
             article.blocks.map(renderBlock)
           ) : article.htmlContent ? (
-            <div
-              className={styles.richText}
-              dangerouslySetInnerHTML={{ __html: article.htmlContent }}
-            />
+            <div className={styles.richText}>
+              {parse(article.htmlContent)}
+            </div>
           ) : (article.description || article.excerpt) ? (
             <p>{article.description || article.excerpt}</p>
           ) : null}
