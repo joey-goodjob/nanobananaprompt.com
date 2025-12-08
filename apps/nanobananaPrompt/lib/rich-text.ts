@@ -28,7 +28,7 @@ function extractUrlLikeValue(candidate: unknown): string | undefined {
   return undefined;
 }
 
-export function normalizeImageSrc(src?: string | null) {
+export function normalizeImageSrc(src?: string | null): string | undefined {
   if (!src) return undefined;
 
   const trimmed = src.trim();
@@ -56,14 +56,14 @@ export function normalizeImageSrc(src?: string | null) {
   return trimmed;
 }
 
-export function extractFirstImageFromHtml(html?: string) {
+export function extractFirstImageFromHtml(html?: string): string | undefined {
   if (!html) return undefined;
   const match = html.match(/<img[^>]+(?:data-src|src)=["']([^"']+)["']/i);
   if (!match) return undefined;
   return normalizeImageSrc(match[1]);
 }
 
-export function extractImageFromBlocks(blocks?: ArticleBlock[]) {
+export function extractImageFromBlocks(blocks?: ArticleBlock[]): string | undefined {
   if (!blocks?.length) return undefined;
 
   for (const block of blocks) {
