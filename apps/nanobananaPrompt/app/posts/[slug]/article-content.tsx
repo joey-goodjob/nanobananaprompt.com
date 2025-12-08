@@ -7,7 +7,11 @@ import { formatArticleDate } from "@/lib/article-utils";
 import type { Article, ArticleBlock } from "@/types/cms";
 import styles from "./page.module.css";
 import { useLanguage } from "../../_components/language-provider";
-import parse from "html-react-parser";
+import parse, {
+  type Element,
+  type HTMLReactParserOptions,
+} from "html-react-parser";
+import { normalizeImageSrc } from "@/lib/rich-text";
 
 type ArticleContentProps = {
   slug: string;
@@ -123,6 +127,35 @@ function blockImage(block: ArticleBlock) {
   return undefined;
 }
 
+const richTextParserOptions: HTMLReactParserOptions = {
+  replace(domNode) {
+    if (domNode.type !== "tag" || domNode.name !== "img") {
+      return undefined;
+    }
+
+    const element = domNode as Element;
+    const attribs = element.attribs ?? {};
+    const normalizedSrc =
+      normalizeImageSrc(attribs.src) || normalizeImageSrc(attribs["data-src"]);
+
+    if (!normalizedSrc) {
+      return null;
+    }
+
+    attribs.src = normalizedSrc;
+    attribs.alt = attribs.alt || "文章插图";
+    attribs.loading = attribs.loading || "lazy";
+    attribs.decoding = attribs.decoding || "async";
+    attribs.style = attribs.style
+      ? `${attribs.style};max-width:100%;height:auto;`
+      : "max-width:100%;height:auto;";
+
+    element.attribs = attribs;
+
+    return undefined;
+  },
+};
+
 function renderBlock(block: ArticleBlock, index: number) {
   const heading = blockHeading(block);
   const paragraphs = blockParagraphs(block);
@@ -145,7 +178,7 @@ function renderBlock(block: ArticleBlock, index: number) {
       {paragraphs.map((text, idx) =>
         /<\w+/.test(text) ? (
           <div key={`block-${index}-p-${idx}`} className={styles.richText}>
-            {parse(text)}
+            {parse(text, richTextParserOptions)}
           </div>
         ) : (
           <p key={`block-${index}-p-${idx}`}>{text}</p>
@@ -265,7 +298,7 @@ export default function ArticleContent({
             article.blocks.map(renderBlock)
           ) : article.htmlContent ? (
             <div className={styles.richText}>
-              {parse(article.htmlContent)}
+              {parse(article.htmlContent, richTextParserOptions)}
             </div>
           ) : (article.description || article.excerpt) ? (
             <p>{article.description || article.excerpt}</p>

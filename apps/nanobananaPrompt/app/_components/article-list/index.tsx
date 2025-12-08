@@ -7,6 +7,7 @@ import {
   getArticleDescription,
   readableTag,
 } from "@/lib/article-utils";
+import { extractFirstImageFromHtml, extractImageFromBlocks } from "@/lib/rich-text";
 import type { ArticleListItem } from "@/types/cms";
 import styles from "../../page.module.css";
 
@@ -17,12 +18,6 @@ export interface ArticleListProps {
   hasMore?: boolean;
   onLoadMore?: () => void;
   placeholder?: string | null;
-}
-
-function extractFirstImage(html?: string) {
-  if (!html) return undefined;
-  const match = html.match(/<img[^>]+src=["']([^"']+)["']/i);
-  return match?.[1];
 }
 
 function extractFirstParagraph(html?: string) {
@@ -45,7 +40,10 @@ export default function ArticleList({
   const hasArticles = items.length > 0;
 
   return (
-    <section className={styles.articleSection} id="article-list">
+    <section
+      className={`${styles.articleSection} page-container`}
+      id="article-list"
+    >
       {(!hasArticles || loading) && (
         <div className={styles.loadingState}>
           <span className={styles.loadingDot} aria-hidden="true" />
@@ -57,7 +55,10 @@ export default function ArticleList({
         <>
           <div className={styles.waterfallGrid}>
             {items.map((article) => {
-              const fallbackImage = extractFirstImage(article.htmlContent);
+              const fallbackImage =
+                extractFirstImageFromHtml(article.htmlContent) ||
+                extractImageFromBlocks(article.blocks);
+              const cardImage = article.coverImage || fallbackImage;
               return (
                 <article key={article.id} className={styles.articleCard}>
                   <Link href={`/posts/${article.slug}`}>
@@ -75,14 +76,15 @@ export default function ArticleList({
                         extractFirstParagraph(article.htmlContent) ||
                         "来自 Nanobanana CMS 的提示词"}
                     </p>
-                    {(article.coverImage || fallbackImage) && (
+                    {cardImage && (
                       <Image
                         className={styles.cardImage}
-                        src={article.coverImage || fallbackImage || ""}
+                        src={cardImage}
                         alt={article.title}
                         width={400}
                         height={220}
                         sizes="(max-width: 600px) 100vw, 400px"
+                        unoptimized
                       />
                     )}
                     <div className={styles.cardFooter}>

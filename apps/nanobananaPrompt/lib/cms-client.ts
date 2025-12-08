@@ -39,7 +39,7 @@ export const cmsConfig = {
   })(),
   endpoints: {
     landingPages: "/api/landing-pages",
-    posts: "/api/posts",
+    posts: "/api/posts/list",
   },
   cache: {
     revalidate: 60,
@@ -229,6 +229,7 @@ function mapArticleListItem(doc: Record<string, unknown>): ArticleListItem {
     excerpt: article.excerpt,
     coverImage: article.coverImage,
     htmlContent: article.htmlContent,
+    blocks: article.blocks,
     publishedAt: article.publishedAt,
     updatedAt: article.updatedAt,
     category: article.category,

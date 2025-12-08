@@ -41,6 +41,7 @@ export type ArticleListItem = {
   excerpt?: string;
   coverImage?: string;
   htmlContent?: string;
+  blocks?: ArticleBlock[];
   publishedAt?: string;
   updatedAt?: string;
   category?: string;

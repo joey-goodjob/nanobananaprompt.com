@@ -212,10 +212,20 @@
   gap: 12px;
   box-shadow: var(--card-shadow);
   transition: transform var(--transition);
+  overflow: hidden;
 }
 
 .articleCard:hover {
   transform: translateY(-4px);
+}
+
+.articleCard a {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  height: 100%;
+  color: inherit;
 }
 
 .cardHeader {
