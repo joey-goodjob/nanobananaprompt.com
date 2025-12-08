@@ -39,7 +39,7 @@ export const cmsConfig = {
   })(),
   endpoints: {
     landingPages: "/api/landing-pages",
-    posts: "/api/posts/list",
+    posts: "/api/posts",
   },
   cache: {
     revalidate: 60,
