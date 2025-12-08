@@ -30,10 +30,10 @@ export default async function HomePage() {
         pageSize={pageSize}
       />
 
-      <WhyChooseSection />
+      {/* <WhyChooseSection />
       <TutorialsGuidesSection />
       <InspirationGallerySection />
-      <CommunityShowcaseSection />
+      <CommunityShowcaseSection /> */}
       <FaqSection />
       <CtaSection />
     </main>

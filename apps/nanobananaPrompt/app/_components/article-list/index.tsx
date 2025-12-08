@@ -3,11 +3,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import {
-  formatArticleDate,
-  getArticleDescription,
-  readableTag,
-} from "@/lib/article-utils";
-import { extractFirstImageFromHtml, extractImageFromBlocks } from "@/lib/rich-text";
+  extractFirstImageFromHtml,
+  extractImageFromBlocks,
+} from "@/lib/rich-text";
 import type { ArticleListItem } from "@/types/cms";
 import styles from "../../page.module.css";
 
@@ -18,14 +16,6 @@ export interface ArticleListProps {
   hasMore?: boolean;
   onLoadMore?: () => void;
   placeholder?: string | null;
-}
-
-function extractFirstParagraph(html?: string) {
-  if (!html) return undefined;
-  const match = html.match(/<p[^>]*>([\s\S]*?)<\/p>/i);
-  const raw = match?.[1] ?? html;
-  const text = raw.replace(/<[^>]+>/g, "").trim();
-  return text || undefined;
 }
 
 export default function ArticleList({
@@ -55,54 +45,31 @@ export default function ArticleList({
         <>
           <div className={styles.waterfallGrid}>
             {items.map((article) => {
+              // 提取图片 URL（优先使用封面图，否则从内容中提取）
               const fallbackImage =
                 extractFirstImageFromHtml(article.htmlContent) ||
                 extractImageFromBlocks(article.blocks);
               const cardImage = article.coverImage || fallbackImage;
+
+              // 如果没有图片，跳过这篇文章
+              if (!cardImage) return null;
+
               return (
-                <article key={article.id} className={styles.articleCard}>
-                  <Link href={`/posts/${article.slug}`}>
-                    <div className={styles.cardHeader}>
-                      <span className={styles.cardTag}>
-                        {article.category || article.tags?.[0] || "Nanobanana"}
-                      </span>
-                      <time className={styles.cardDate}>
-                        {formatArticleDate(article.publishedAt)}
-                      </time>
-                    </div>
-                    <h3 className={styles.cardTitle}>{article.title}</h3>
-                    <p className={styles.cardDescription}>
-                      {getArticleDescription(article) ||
-                        extractFirstParagraph(article.htmlContent) ||
-                        "来自 Nanobanana CMS 的提示词"}
-                    </p>
-                    {cardImage && (
-                      <Image
-                        className={styles.cardImage}
-                        src={cardImage}
-                        alt={article.title}
-                        width={400}
-                        height={220}
-                        sizes="(max-width: 600px) 100vw, 400px"
-                        unoptimized
-                      />
-                    )}
-                    <div className={styles.cardFooter}>
-                      <div className={styles.tagGroup}>
-                        {(article.tags || [])
-                          .slice(0, 3)
-                          .map((tag) => (
-                            <span key={tag} className={styles.tagChip}>
-                              {readableTag(tag)}
-                            </span>
-                          ))}
-                      </div>
-                      <span className={styles.readingTime}>
-                        {article.readingTime || "3 min"}
-                      </span>
-                    </div>
-                  </Link>
-                </article>
+                <Link
+                  key={article.id}
+                  href={`/posts/${article.slug}`}
+                  className={styles.imageCard}
+                >
+                  <Image
+                    className={styles.cardImage}
+                    src={cardImage}
+                    alt={article.title || "提示词图片"}
+                    width={400}
+                    height={400}
+                    sizes="(max-width: 640px) 100vw, (max-width: 960px) 50vw, 33vw"
+                    unoptimized
+                  />
+                </Link>
               );
             })}
           </div>
