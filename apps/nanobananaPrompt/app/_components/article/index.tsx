@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import ArticleList, {
   type ArticleListProps,
 } from "@/app/_components/article-list";
@@ -20,23 +21,17 @@ export default function ArticleSection({
   pageSize,
 }: ArticleSectionProps) {
   const { language } = useLanguage();
+  const router = useRouter();
   const [articles, setArticles] = useState(initialArticles);
+  // 保留这些状态用于语言切换时的数据刷新
   const [page, setPage] = useState(initialPage);
   const [totalPageCount, setTotalPageCount] = useState(totalPages);
   const [loading, setLoading] = useState(false);
-  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const hasMore = page < totalPageCount;
-
-  const mergeArticles = useCallback((nextItems: ArticleListProps["articles"]) => {
-    setArticles((prev) => {
-      if (!prev || !nextItems) return prev;
-      const existingIds = new Set(prev.map((item) => item.id));
-      const appended = nextItems.filter((item) => !existingIds.has(item.id));
-      return appended.length ? [...prev, ...appended] : prev;
-    });
-  }, []);
+  // 首页始终显示"展开更多"按钮，点击后跳转到 /prompts 页面
+  const hasMore = true;
+  const loadingMore = false;
 
   useEffect(() => {
     let cancelled = false;
@@ -73,30 +68,10 @@ export default function ArticleSection({
     };
   }, [language.locale, pageSize]);
 
-  const handleLoadMore = useCallback(async () => {
-    if (!hasMore) return;
-    setLoadingMore(true);
-    try {
-      const response = await fetchArticlesClient({
-        limit: pageSize,
-        page: page + 1,
-        locale: language.locale,
-      });
-      if (response) {
-        mergeArticles(response.items);
-        setPage(response.page);
-        setTotalPageCount(response.totalPages ?? response.page ?? page + 1);
-        setError(null);
-      } else {
-        setError("CMS 暂时没有返回新的文章。");
-      }
-    } catch (err) {
-      console.error("[ArticleSection] Load more failed:", err);
-      setError("展开更多失败，请稍后再试。");
-    } finally {
-      setLoadingMore(false);
-    }
-  }, [hasMore, language.locale, mergeArticles, page, pageSize]);
+  const handleLoadMore = useCallback(() => {
+    // 首页的"展开更多"按钮跳转到 /prompts 页面
+    router.push("/prompts");
+  }, [router]);
 
   const placeholderMessage = useMemo(() => {
     if (loading) return "正在刷新 Nanobanana 提示词...";
