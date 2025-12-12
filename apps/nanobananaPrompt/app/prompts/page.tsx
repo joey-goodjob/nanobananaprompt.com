@@ -12,13 +12,61 @@ export default async function PromptsPage() {
     locale: cmsConfig.defaults.locale,
   });
   const articles = articleResponse?.items ?? [];
-  const categories = Array.from(
-    new Set(
-      articles
-        .map((article) => article.category)
-        .filter((category): category is string => Boolean(category))
-    )
-  );
+
+  // 直接从 CMS API 获取原始数据，提取所有分类
+  // 因为 normalizeArticle 只提取了第一个分类，我们需要从原始数据中提取所有分类
+  const url = `${cmsConfig.baseUrl}${cmsConfig.endpoints.posts}?where[tenant][equals]=${cmsConfig.tenantId}&where[published][equals]=true&limit=${PAGE_SIZE}&locale=${cmsConfig.defaults.locale}&depth=2`;
+
+  // 构建请求头
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+  };
+  if (cmsConfig.secret) {
+    headers.Authorization = `Bearer ${cmsConfig.secret}`;
+  }
+
+  // 获取原始数据
+  let allCategoriesSet = new Set<string>();
+  try {
+    const rawResponse = await fetch(url, {
+      headers,
+      next: { revalidate: cmsConfig.cache.revalidate },
+    });
+
+    if (rawResponse.ok) {
+      const rawData = await rawResponse.json();
+      const rawDocs = rawData?.docs || [];
+
+      // 从所有文章的 categories 数组中提取所有分类的 name
+      rawDocs.forEach((doc: Record<string, unknown>) => {
+        if (Array.isArray(doc.categories)) {
+          doc.categories.forEach((cat: unknown) => {
+            if (cat && typeof cat === "object") {
+              const catObj = cat as Record<string, unknown>;
+              const name = typeof catObj.name === "string" ? catObj.name : null;
+              if (name) {
+                allCategoriesSet.add(name);
+              }
+            }
+          });
+        }
+      });
+    }
+  } catch (error) {
+    console.warn("[PromptsPage] 获取原始分类数据失败:", error);
+  }
+
+  // 如果从原始数据提取失败，回退到从处理后的数据提取
+  const categories =
+    allCategoriesSet.size > 0
+      ? Array.from(allCategoriesSet).sort() // 排序以便显示
+      : Array.from(
+          new Set(
+            articles
+              .map((article) => article.category)
+              .filter((category): category is string => Boolean(category))
+          )
+        );
 
   return (
     <main className={styles.page}>

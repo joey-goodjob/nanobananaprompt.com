@@ -206,10 +206,44 @@ function normalizeArticle(raw: Record<string, unknown>): Article {
     createdAt: asString(raw.createdAt),
     updatedAt: asString(raw.updatedAt),
     publishedAt: asString(raw.publishedAt) || asString(raw.createdAt),
-    category:
-      asString(raw.category) ||
-      (Array.isArray(raw.categories) && asString(raw.categories[0])) ||
-      undefined,
+    category: (() => {
+      // 优先使用 category 字段（字符串）
+      if (typeof raw.category === "string") return raw.category;
+
+      // 支持 categories 数组（关系对象数组）
+      if (Array.isArray(raw.categories) && raw.categories.length > 0) {
+        const firstCategory = raw.categories[0];
+        // 如果是对象，提取 name 字段
+        if (firstCategory && typeof firstCategory === "object") {
+          const catObj = firstCategory as Record<string, unknown>;
+          return (
+            asString(catObj.name) ||
+            asString(catObj.title) ||
+            asString(catObj.slug)
+          );
+        }
+        // 如果是字符串，直接使用
+        if (typeof firstCategory === "string") {
+          return firstCategory;
+        }
+      }
+
+      // 支持 catalog 字段（单个关系对象）
+      if (
+        raw.catalog &&
+        typeof raw.catalog === "object" &&
+        raw.catalog !== null
+      ) {
+        const catObj = raw.catalog as Record<string, unknown>;
+        return (
+          asString(catObj.name) ||
+          asString(catObj.title) ||
+          asString(catObj.slug)
+        );
+      }
+
+      return undefined;
+    })(),
     tags: normalizeTags(raw.tags || raw.keywords),
     blocks: normalizeBlocks(blockSource),
     status:
@@ -285,31 +319,50 @@ export async function fetchArticlesClient(
     `locale=${locale}`,
   ];
 
-  if (params.category) {
-    queryParts.push(
-      `where[categories][contains]=${encodeURIComponent(params.category)}`
-    );
-  }
-
+  // 注意：Payload CMS 可能不支持嵌套字段查询 where[categories.name][equals]
+  // 如果服务端查询失败，我们会在客户端进行筛选
   const url = `${cmsConfig.baseUrl}${cmsConfig.endpoints.posts}?${queryParts.join(
     "&"
   )}`;
 
   const data = await cmsFetch<CmsListResponse<Record<string, unknown>>>(url);
 
+  // 如果指定了分类，但服务端查询可能不支持，我们在客户端进行筛选
+  let filteredDocs = Array.isArray(data?.docs) ? data.docs : [];
+
+  if (params.category && filteredDocs.length > 0) {
+    filteredDocs = filteredDocs.filter((doc: Record<string, unknown>) => {
+      if (!Array.isArray(doc.categories)) return false;
+
+      // 检查 categories 数组中是否有 name 等于指定分类的项
+      return doc.categories.some((cat: unknown) => {
+        if (cat && typeof cat === "object") {
+          const catObj = cat as Record<string, unknown>;
+          const name = typeof catObj.name === "string" ? catObj.name : null;
+          return name === params.category;
+        }
+        return false;
+      });
+    });
+  }
+
   if (!data) {
     return null;
   }
 
-  const docs = Array.isArray(data.docs) ? data.docs : [];
+  // 使用筛选后的文档列表
+  const docs = filteredDocs;
 
   return {
     items: docs.map(mapArticleListItem),
-    total: data.totalDocs ?? docs.length,
+    total: params.category
+      ? filteredDocs.length
+      : (data.totalDocs ?? docs.length),
     page: data.page ?? page,
     pageSize: data.limit ?? limit,
-    totalPages:
-      data.totalPages ?? Math.ceil((data.totalDocs ?? docs.length) / limit),
+    totalPages: params.category
+      ? Math.ceil(filteredDocs.length / limit)
+      : (data.totalPages ?? Math.ceil((data.totalDocs ?? docs.length) / limit)),
   };
 }
 
