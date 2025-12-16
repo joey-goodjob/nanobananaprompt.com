@@ -10,7 +10,9 @@
   border-radius: 999px;
   font-weight: 600;
   border: 1px solid transparent;
-  transition: transform var(--transition), box-shadow var(--transition),
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition),
     background var(--transition);
 }
 
@@ -300,7 +302,9 @@
   background: rgba(255, 255, 255, 0.8);
   font-weight: 600;
   color: var(--text-strong);
-  transition: transform var(--transition), background var(--transition);
+  transition:
+    transform var(--transition),
+    background var(--transition);
 }
 
 .loadMoreButton:disabled {

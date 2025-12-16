@@ -39,6 +39,88 @@
   gap: 24px;
 }
 
+/* 下拉容器：两级联动（类似截图） */
+.navItemWithMenu {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.navItemWithMenuOpen .megaDropdown {
+  display: grid;
+}
+
+.megaDropdown {
+  display: none;
+  position: absolute;
+  top: 120%;
+  left: 0;
+  padding: 12px;
+  border-radius: 14px;
+  background: #fffdf5;
+  border: 1px solid rgba(255, 207, 134, 0.5);
+  box-shadow: 0 12px 30px rgba(218, 160, 71, 0.25);
+  min-width: 360px;
+  z-index: 30;
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 12px;
+}
+
+.navItemWithMenu:hover .megaDropdown {
+  display: grid;
+}
+
+.megaLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-right: 1px solid rgba(255, 207, 134, 0.5);
+  padding-right: 8px;
+}
+
+.megaLeftItem,
+.megaLeftItemActive {
+  border: none;
+  background: transparent;
+  text-align: left;
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  color: var(--text-strong);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+
+.megaLeftItem:hover {
+  background: rgba(252, 211, 77, 0.25);
+}
+
+.megaLeftItemActive {
+  background: rgba(252, 211, 77, 0.35);
+  color: var(--text-strong);
+  font-weight: 600;
+}
+
+.megaRight {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.megaRightItem {
+  font-size: 14px;
+  color: var(--text-strong);
+  padding: 6px 8px;
+  border-radius: 10px;
+  transition: background var(--transition), color var(--transition);
+}
+
+.megaRightItem:hover {
+  background: rgba(252, 211, 77, 0.25);
+  color: var(--text-strong);
+}
+
 .navItem,
 .navItemActive {
   font-weight: 500;

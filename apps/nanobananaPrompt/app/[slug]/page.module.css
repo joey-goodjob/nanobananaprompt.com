@@ -1,0 +1,239 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+  padding-bottom: 80px;
+}
+
+.heroWrapper {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  background: linear-gradient(115deg, #fff2c9, #ffe5b0);
+  padding: 120px 24px;
+}
+
+.heroSection {
+  width: min(900px, 100%);
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.badge {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 204, 122, 0.5);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.heroContent h1 {
+  margin: 0;
+}
+
+.navigator {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.searchRow {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 220px;
+  padding: 14px 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 200, 120, 0.6);
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 15px;
+}
+
+.refreshButton {
+  padding: 12px 24px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 200, 120, 0.8);
+  background: rgba(255, 255, 255, 0.92);
+  font-weight: 600;
+}
+
+.categoryBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.categoryButton,
+.categoryButtonActive {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 200, 120, 0.6);
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  transition:
+    background var(--transition),
+    color var(--transition);
+}
+
+.categoryButtonActive {
+  background: linear-gradient(120deg, #fcd34d, #fbbf24);
+  color: #2f1904;
+  border-color: transparent;
+  font-weight: 600;
+}
+
+.errorMessage {
+  color: #b83221;
+  font-size: 14px;
+  margin: 0;
+}
+
+.waterfallGrid {
+  column-count: 3;
+  column-gap: 20px;
+}
+
+.articleCard {
+  break-inside: avoid;
+  margin-bottom: 20px;
+  padding: 20px;
+  border-radius: 26px;
+  border: 1px solid rgba(255, 205, 125, 0.5);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 纯图片卡片样式 */
+.imageCard {
+  break-inside: avoid;
+  margin-bottom: 20px;
+  display: block;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.imageCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.imageCard .cardImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-soft);
+}
+
+.cardTag {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(58, 125, 68, 0.08);
+  color: var(--leaf);
+}
+
+.articleCard h3 {
+  margin: 0;
+}
+
+.articleCard p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tagGroup {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tagGroup span {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 214, 122, 0.4);
+  font-size: 12px;
+}
+
+.readingTime {
+  font-size: 12px;
+  color: var(--text-soft);
+}
+
+.loadMoreRow {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.loadMoreButton {
+  padding: 12px 32px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 200, 120, 0.7);
+  background: rgba(255, 255, 255, 0.92);
+  font-weight: 600;
+}
+
+.loadMoreButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 960px) {
+  .heroSection {
+    grid-template-columns: 1fr;
+  }
+
+  .waterfallGrid {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 640px) {
+  .searchRow {
+    flex-direction: column;
+  }
+
+  .waterfallGrid {
+    column-count: 1;
+  }
+}
