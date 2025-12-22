@@ -5,6 +5,9 @@ import CategoryNavigator from "./_components/category-navigator";
 import CategoryHeroGrid from "./_components/category-hero-grid";
 import { cmsConfig, fetchArticlesClient } from "@/lib/cms-client";
 import styles from "./page.module.css";
+import WhyChooseSection from "./_components/why-choose";
+import TutorialsGuidesSection from "./_components/tutorials-guides";
+import InspirationGallerySection from "./_components/inspiration-gallery";
 
 export const revalidate = 60;
 
@@ -71,19 +74,19 @@ export default async function HomePage() {
     <main className={styles.page}>
       <CategoryHeroGrid categories={categories} />
 
-      <CategoryNavigator categories={categories} />
+      {/* <CategoryNavigator categories={categories} /> */}
 
-      <ArticleSection
+      {/* <ArticleSection
         articles={articles}
         initialPage={articleResponse?.page ?? 1}
         totalPages={totalPages}
         pageSize={pageSize}
-      />
+      /> */}
 
-      {/* <WhyChooseSection />
+      <WhyChooseSection />
       <TutorialsGuidesSection />
       <InspirationGallerySection />
-      <CommunityShowcaseSection /> */}
+      {/* <CommunityShowcaseSection /> */}
       <FaqSection />
       <CtaSection />
     </main>

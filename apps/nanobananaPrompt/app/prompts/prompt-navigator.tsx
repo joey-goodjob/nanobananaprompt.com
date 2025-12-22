@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { fetchArticlesClient } from "@/lib/cms-client";
 import type { ArticleListItem } from "@/types/cms";
 import styles from "./page.module.css";
@@ -25,10 +26,16 @@ export default function PromptNavigator({
   initialPage,
 }: PromptNavigatorProps) {
   const { language } = useLanguage();
+  const searchParams = useSearchParams();
+  // 从 URL 读取 category 参数
+  const urlCategory = searchParams.get("category");
+  
   const [articles, setArticles] = useState<ArticleListItem[]>(initialArticles);
   const [page, setPage] = useState(initialPage);
   const [totalPageCount, setTotalPageCount] = useState(totalPages);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  // 如果 URL 中有 category 参数，且该分类存在于 categories 列表中，则初始化为该分类
+  const initialCategory = urlCategory && categories.includes(urlCategory) ? urlCategory : null;
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(initialCategory);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);

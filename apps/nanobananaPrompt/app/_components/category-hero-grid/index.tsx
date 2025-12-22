@@ -59,11 +59,11 @@ export default function CategoryHeroGrid({
     // 关键词匹配
     const keys = Object.keys(CATEGORY_IMAGES);
     for (const k of keys) {
-      if (key.includes(k)) return CATEGORY_IMAGES[k];
+      if (key.includes(k) && CATEGORY_IMAGES[k]) return CATEGORY_IMAGES[k];
     }
 
     // 默认
-    return CATEGORY_IMAGES.default;
+    return CATEGORY_IMAGES.default || "";
   };
 
   if (!displayCategories || displayCategories.length === 0) {
@@ -86,7 +86,7 @@ export default function CategoryHeroGrid({
         {displayCategories.map((cat) => (
           <Link
             key={cat.slug}
-            href={`/prompts?category=${cat.slug}`} // 假设跳转到筛选页
+            href={`/${cat.slug}`} // 使用 slug 跳转到动态路由 /[slug]
             className={styles.card}
           >
             <Image
