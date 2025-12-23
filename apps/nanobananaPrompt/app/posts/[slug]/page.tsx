@@ -4,7 +4,7 @@ import {
   fetchArticlesClient,
   fetchPostClient,
 } from "@/lib/cms-client";
-import ArticleContent from "./article-content";
+import PageRenderer from "@/app/_components/page-renderer";
 
 type RouteParams = { slug: string } | Promise<{ slug: string }>;
 
@@ -46,6 +46,7 @@ export async function generateMetadata({
       description: article.description || article.excerpt || "",
       type: "article",
       url: `/posts/${article.slug}`,
+      images: article.coverImage ? [{ url: article.coverImage }] : [],
     },
     alternates: {
       canonical: `/posts/${article.slug}`,
@@ -65,5 +66,12 @@ export default async function ArticlePage({
     notFound();
   }
 
-  return <ArticleContent slug={slug} initialArticle={article} />;
+  return (
+    <PageRenderer
+      page={article}
+      pageType="post"
+      showMeta={true}
+      showBreadcrumb={true}
+    />
+  );
 }

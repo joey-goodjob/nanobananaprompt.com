@@ -1,5 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   color-scheme: light;
+
+  /* ===== Banana Theme - Brand Colors ===== */
   --banana-50: #fffbef;
   --banana-100: #fff4d4;
   --banana-200: #ffe6a9;
@@ -8,24 +14,81 @@
   --banana-500: #f8b734;
   --banana-600: #d28b1e;
   --leaf: #3a7d44;
-  --text-strong: #3a2d15;
-  --text-muted: #6c5530;
-  --text-soft: rgba(63, 42, 17, 0.6);
-  --page-bg: #fffdf5;
-  --page-gradient:
-    radial-gradient(circle at 20% 20%,
+
+  /* ===== Generic Theme Variables (for web components) ===== */
+
+  /* Primary Colors - mapped to banana theme */
+  --primary-50: var(--banana-50);
+  --primary-100: var(--banana-100);
+  --primary-200: var(--banana-200);
+  --primary-300: var(--banana-300);
+  --primary-400: var(--banana-400);
+  --primary-500: var(--banana-500);
+  --primary-600: var(--banana-600);
+  --primary: var(--banana-500);
+
+  /* Accent Colors - mapped to leaf green */
+  --accent-500: var(--leaf);
+  --accent: var(--leaf);
+
+  /* Text Colors */
+  --text-primary: #3a2d15;
+  --text-secondary: #6c5530;
+  --text-tertiary: rgba(63, 42, 17, 0.6);
+  --text-inverse: #ffffff;
+
+  /* Background Colors */
+  --bg-primary: #fffdf5;
+  --bg-secondary: #fff8e0;
+  --bg-tertiary: #fff4d3;
+  --bg-inverse: #fff4d3;
+  --bg-gradient:
+    radial-gradient(
+      circle at 20% 20%,
       rgba(255, 215, 116, 0.3),
-      transparent 50%),
-    radial-gradient(circle at 80% 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 0%,
       rgba(255, 187, 112, 0.25),
-      transparent 45%),
+      transparent 45%
+    ),
     linear-gradient(180deg, #fffdf5 0%, #fff8e0 80%, #fff4d3 100%);
-  --card-bg: rgba(255, 255, 255, 0.85);
-  --card-border: rgba(255, 201, 92, 0.45);
-  --card-shadow: 0 15px 45px rgba(243, 194, 107, 0.35);
-  --frosted: saturate(160%) blur(16px);
+
+  /* Surface Colors (Cards, Panels) */
+  --surface-primary: rgba(255, 255, 255, 0.85);
+  --surface-secondary: rgba(255, 255, 255, 0.7);
+  --surface-border: rgba(255, 201, 92, 0.45);
+  --surface-shadow: 0 15px 45px rgba(243, 194, 107, 0.35);
+
+  /* Interactive States */
+  --interactive-hover: rgba(248, 183, 52, 0.1);
+  --interactive-active: rgba(248, 183, 52, 0.2);
+  --interactive-disabled: rgba(108, 85, 48, 0.3);
+
+  /* Layout */
   --max-width: 1200px;
-  --transition: 0.22s ease;
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 16px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 220ms ease;
+  --transition-slow: 300ms ease;
+
+  /* Legacy variables (keep for backward compatibility) */
+  --text-strong: var(--text-primary);
+  --text-muted: var(--text-secondary);
+  --text-soft: var(--text-tertiary);
+  --page-bg: var(--bg-primary);
+  --page-gradient: var(--bg-gradient);
+  --card-bg: var(--surface-primary);
+  --card-border: var(--surface-border);
+  --card-shadow: var(--surface-shadow);
+  --frosted: saturate(160%) blur(16px);
+  --transition: var(--transition-base);
+
   scroll-behavior: smooth;
 }
 
@@ -85,6 +148,5 @@ button,
 }
 
 .page-container {
-  width: min(var(--max-width), 100% - 32px);
   margin: 0 auto;
 }

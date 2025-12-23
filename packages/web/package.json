@@ -1,0 +1,40 @@
+{
+  "name": "@repo/web",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    ".": "./src/cms-blocks.ts",
+    "./blocks": "./src/cms-blocks.ts",
+    "./types": "./src/types/index.ts",
+    "./registry": "./src/registry/block-registry.ts",
+    "./renderer": "./src/render/BlockRenderer.tsx",
+    "./utils": "./src/lib/utils/utils.ts",
+    "./blocks/*": "./src/blocks/*/index.tsx",
+    "./*": "./src/*.tsx"
+  },
+  "scripts": {
+    "lint": "eslint . --max-warnings 0",
+    "generate:component": "turbo gen react-component",
+    "check-types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^22.15.3",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "eslint": "^9.39.1",
+    "typescript": "5.9.2"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.23.26",
+    "lucide-react": "^0.562.0",
+    "next-intl": "^4.6.1",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.0",
+    "react-fast-marquee": "^1.6.5",
+    "react-icons": "^5.5.0",
+    "tailwind-merge": "^3.4.0"
+  }
+}

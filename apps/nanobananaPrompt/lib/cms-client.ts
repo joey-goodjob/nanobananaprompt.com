@@ -105,15 +105,11 @@ async function cmsFetch<T>(
     });
 
     if (!response.ok) {
-      console.error(
-        `[CMS] Request failed: ${response.status} ${response.statusText}`
-      );
       return null;
     }
 
     return (await response.json()) as T;
   } catch (error) {
-    console.error(`[CMS] Unexpected error for ${url}`, error);
     return null;
   }
 }
@@ -189,7 +185,7 @@ function normalizeArticle(raw: Record<string, unknown>): Article {
     getImageUrl(raw.heroImage) ||
     getImageUrl(raw.thumbnail);
 
-  return {
+  const article: Article = {
     id,
     slug,
     title: asString(raw.title) || asString(raw.heroTitle) || slug,
@@ -251,6 +247,8 @@ function normalizeArticle(raw: Record<string, unknown>): Article {
       asString(raw.status) ||
       (raw.published ? "published" : "draft"),
   };
+
+  return article;
 }
 
 function mapArticleListItem(doc: Record<string, unknown>): ArticleListItem {
@@ -294,12 +292,15 @@ export async function fetchArticleClient(
 
   const data = await cmsFetch<CmsListResponse<Record<string, unknown>>>(url);
 
+  console.log('[CMS Landing Page] Full response:', JSON.stringify(data, null, 2));
+
   if (!data?.docs?.length) {
-    console.warn(`[CMS] Landing page not found: slug=${slug}`);
     return null;
   }
 
   const doc = data.docs[0];
+  console.log('[CMS Landing Page] First doc:', JSON.stringify(doc, null, 2));
+
   if (!doc) return null;
   return normalizeArticle(doc);
 }
@@ -327,6 +328,7 @@ export async function fetchArticlesClient(
 
   const data = await cmsFetch<CmsListResponse<Record<string, unknown>>>(url);
 
+  console.log("cms请求返回内容", data);
   // 如果指定了分类，但服务端查询可能不支持，我们在客户端进行筛选
   let filteredDocs = Array.isArray(data?.docs) ? data.docs : [];
 
@@ -383,7 +385,6 @@ export async function fetchPostClient(
   const data = await cmsFetch<CmsListResponse<Record<string, unknown>>>(url);
 
   if (!data?.docs?.length) {
-    console.warn(`[CMS] Post not found: slug=${slug}`);
     return null;
   }
 
@@ -405,14 +406,10 @@ export async function fetchPostByIdClient(
   }
 
   if (data.tenant && `${data.tenant}` !== cmsConfig.tenantId) {
-    console.warn(
-      `[CMS] Tenant mismatch for post ${id}: expected ${cmsConfig.tenantId}, got ${data.tenant}`
-    );
     return null;
   }
 
   if (data.published === false) {
-    console.warn(`[CMS] Post is not published: id=${id}`);
     return null;
   }
 
