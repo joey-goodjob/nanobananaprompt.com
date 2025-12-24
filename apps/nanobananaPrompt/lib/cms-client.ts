@@ -290,16 +290,17 @@ export async function fetchArticleClient(
     "&"
   )}`;
 
+
+
   const data = await cmsFetch<CmsListResponse<Record<string, unknown>>>(url);
 
-  console.log('[CMS Landing Page] Full response:', JSON.stringify(data, null, 2));
 
   if (!data?.docs?.length) {
+
     return null;
   }
 
   const doc = data.docs[0];
-  console.log('[CMS Landing Page] First doc:', JSON.stringify(doc, null, 2));
 
   if (!doc) return null;
   return normalizeArticle(doc);
@@ -326,9 +327,10 @@ export async function fetchArticlesClient(
     "&"
   )}`;
 
+
+
   const data = await cmsFetch<CmsListResponse<Record<string, unknown>>>(url);
 
-  console.log("cms请求返回内容", data);
   // 如果指定了分类，但服务端查询可能不支持，我们在客户端进行筛选
   let filteredDocs = Array.isArray(data?.docs) ? data.docs : [];
 

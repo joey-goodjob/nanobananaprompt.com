@@ -7,6 +7,7 @@ const __dirname = path.dirname(__filename);
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    // 移除废弃的 domains 配置，只使用 remotePatterns
     remotePatterns: [
       {
         protocol: "https",

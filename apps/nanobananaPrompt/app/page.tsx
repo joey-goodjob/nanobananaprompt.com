@@ -1,27 +1,14 @@
-import ArticleSection from "./_components/article";
-import CtaSection from "./_components/cta";
-import FaqSection from "./_components/faq";
-import CategoryNavigator from "./_components/category-navigator";
 import CategoryHeroGrid from "./_components/category-hero-grid";
-import { cmsConfig, fetchArticlesClient } from "@/lib/cms-client";
+import PageRenderer from "./_components/page-renderer";
+import { cmsConfig, fetchArticleClient } from "@/lib/cms-client";
 import styles from "./page.module.css";
-import WhyChooseSection from "./_components/why-choose";
-import TutorialsGuidesSection from "./_components/tutorials-guides";
-import InspirationGallerySection from "./_components/inspiration-gallery";
 
 export const revalidate = 60;
 
 const PAGE_SIZE = 18;
 
 export default async function HomePage() {
-  const articleResponse = await fetchArticlesClient({ limit: PAGE_SIZE });
-  const articles = articleResponse?.items ?? [];
-  const total = articleResponse?.total ?? articles.length;
-  const totalPages = articleResponse?.totalPages ?? 1;
-  const pageSize = articleResponse?.pageSize ?? PAGE_SIZE;
-  const featuredArticle = articles[0];
-
-  // 获取分类数据（和 prompts 页面相同的逻辑）
+  // 获取分类数据
   const url = `${cmsConfig.baseUrl}${cmsConfig.endpoints.posts}?where[tenant][equals]=${cmsConfig.tenantId}&where[published][equals]=true&limit=${PAGE_SIZE}&locale=${cmsConfig.defaults.locale}&depth=2`;
 
   const headers: HeadersInit = {
@@ -70,25 +57,25 @@ export default async function HomePage() {
         )
       : [];
 
+  // 从 CMS 获取首页内容（使用特殊的 slug "home"）
+  const homePageArticle = await fetchArticleClient("/home");
+
   return (
     <main className={styles.page}>
+      {/* 保留 CategoryHeroGrid 在顶部 */}
       <CategoryHeroGrid categories={categories} />
 
-      {/* <CategoryNavigator categories={categories} /> */}
-
-      {/* <ArticleSection
-        articles={articles}
-        initialPage={articleResponse?.page ?? 1}
-        totalPages={totalPages}
-        pageSize={pageSize}
-      /> */}
-
-      <WhyChooseSection />
-      <TutorialsGuidesSection />
-      <InspirationGallerySection />
-      {/* <CommunityShowcaseSection /> */}
-      <FaqSection />
-      <CtaSection />
+      {/* 使用 PageRenderer 渲染 CMS 内容 */}
+      {homePageArticle && (
+        <PageRenderer
+          page={homePageArticle}
+          pageType="landing-page"
+          showMeta={false}
+          showBreadcrumb={false}
+          showHeader={false}
+          className={styles.homeContent}
+        />
+      )}
     </main>
   );
 }

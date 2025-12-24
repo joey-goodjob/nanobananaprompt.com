@@ -5,7 +5,6 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Article } from "@/types/cms";
 import { formatArticleDate } from "@/lib/article-utils";
@@ -18,6 +17,44 @@ import {
   blockRegistry,
 } from "@repo/web";
 
+// ==================== 初始化 Block Registry ====================
+// 在模块顶层初始化，确保服务端和客户端都执行
+let registryInitialized = false;
+
+function ensureBlockRegistryInitialized() {
+  if (registryInitialized) return;
+
+  initializeBlockRegistry();
+
+  // 注册自定义映射：你的 CMS 使用 feature:01，需要映射到现有的组件
+  // 直接复用 features:cards 的组件
+  const featuresCardsComponent = blockRegistry.resolve({
+    blockType: "features",
+    blockName: "cards",
+  } as any);
+  if (featuresCardsComponent) {
+    blockRegistry.register("feature:01", featuresCardsComponent);
+  }
+
+  // 也可以将 feature 类型映射到 features
+  const featuresComponent = blockRegistry.resolve({
+    blockType: "features",
+  } as any);
+  if (featuresComponent) {
+    blockRegistry.register("feature", featuresComponent);
+  }
+
+  // 启用调试模式
+  if (process.env.NODE_ENV === "development") {
+    blockRegistry.setDebug(true);
+  }
+
+  registryInitialized = true;
+}
+
+// 立即初始化
+ensureBlockRegistryInitialized();
+
 export type PageType = "post" | "landing-page";
 
 type PageRendererProps = {
@@ -25,6 +62,7 @@ type PageRendererProps = {
   pageType: PageType;
   showMeta?: boolean; // 是否显示元数据(发布时间等)
   showBreadcrumb?: boolean; // 是否显示面包屑
+  showHeader?: boolean; // 是否显示标题和描述
   className?: string;
 };
 
@@ -37,41 +75,9 @@ export default function PageRenderer({
   pageType,
   showMeta = true,
   showBreadcrumb = true,
+  showHeader = true,
   className = "",
 }: PageRendererProps) {
-  const [initialized, setInitialized] = useState(false);
-
-  // 初始化 Block Registry
-  useEffect(() => {
-    if (!initialized) {
-      initializeBlockRegistry();
-
-      // 注册自定义映射：你的 CMS 使用 feature:01，需要映射到现有的组件
-      // 直接复用 features:cards 的组件
-      const featuresCardsComponent = blockRegistry.resolve({
-        blockType: "features",
-        blockName: "cards",
-      } as any);
-      if (featuresCardsComponent) {
-        blockRegistry.register("feature:01", featuresCardsComponent);
-      }
-
-      // 也可以将 feature 类型映射到 features
-      const featuresComponent = blockRegistry.resolve({
-        blockType: "features",
-      } as any);
-      if (featuresComponent) {
-        blockRegistry.register("feature", featuresComponent);
-      }
-
-      // 启用调试模式
-      if (process.env.NODE_ENV === "development") {
-        blockRegistry.setDebug(true);
-      }
-
-      setInitialized(true);
-    }
-  }, [initialized]);
 
   if (!page) {
     return (
@@ -108,7 +114,7 @@ export default function PageRenderer({
 
       <article className={styles.article}>
         {/* Post 类型显示分类和元数据 */}
-        {pageType === "post" && showMeta && (
+        {showHeader && pageType === "post" && showMeta && (
           <>
             {page.category && (
               <p className={styles.category}>{page.category}</p>
@@ -117,17 +123,17 @@ export default function PageRenderer({
         )}
 
         {/* 标题 */}
-        <h1 className={styles.title}>{page.title}</h1>
+        {showHeader && <h1 className={styles.title}>{page.title}</h1>}
 
         {/* 描述/摘要 */}
-        {(page.description || page.excerpt) && (
+        {showHeader && (page.description || page.excerpt) && (
           <p className={styles.description}>
             {page.description || page.excerpt}
           </p>
         )}
 
         {/* Post 类型显示元数据栏 */}
-        {pageType === "post" && showMeta && (
+        {showHeader && pageType === "post" && showMeta && (
           <div className={styles.metaBar}>
             {page.publishedAt && (
               <time dateTime={page.publishedAt}>
